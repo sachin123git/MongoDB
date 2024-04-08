@@ -1,0 +1,98 @@
+const express = require('express');
+const app = express();
+const data = require('./MOCK_DATA.json')
+const fs = require('fs')
+const mongoose = require('mongoose')
+const port = 8000;
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+mongoose.connect('mongodb://127.0.0.1:27017/API')
+    .then(() => {
+        console.log('Connected to MongoDB');
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error);
+    });
+
+const schema = new mongoose.Schema({
+first_name : {
+    type: String,
+    required: true
+},
+last_name : {
+    type: String,
+    required: true
+},
+email : {
+    type: String,
+    unique: true,
+    required: true
+},
+gender : {
+    type: String,
+    required: true
+},
+ip_address : {
+    type: String,
+    required: true
+}
+})
+
+const User = mongoose.model('User', schema);
+
+app.get('/api/home', (req, res) => {
+    res.json(data);
+})
+
+app.post('/api/home', async(req, res) => {
+    const body = req.body;
+
+    const result = await User.create({
+        first_name: body.first_name,
+        last_name: body.last_name,
+        email: body.email,
+        gender: body.gender,
+        ip_address: body.ip_address
+    })
+
+    console.log(result)
+    res.status(201).json({msg : "saved successfully"})
+    // const new_data = { ...body, id: data.length + 1 }
+    // data.push(new_data);
+    // fs.writeFile(`${__dirname}/..MOCK_DATA.js`, JSON.stringify(data), (err) => {
+    //     if (err) {
+    //         console.error(err);
+    //         res.status(500).send('Error saving data');
+    //         return; 
+    //     }
+    //     console.log("The file has been saved!");
+    //     res.json('Data received successfully');
+    // });
+});
+
+app.get('/api/about/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const result = data.find((data) => data.id === id);
+    res.json(result);
+})
+
+app.get('/api/contact', (req, res) => {
+    try {
+        const only_names = data.map((item) => `<li>${item.first_name}</li>`).join('');
+        const html = `<ul>${only_names}</ul>`;
+        res.send(html);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.route('/api/about/:id').delete((req, res) => {
+    res.json("DELETE request received for ID: " + req.params.id);
+});
+
+app.listen(8000, (err, res) => {
+    console.log("the sever is listening", port);
+})
