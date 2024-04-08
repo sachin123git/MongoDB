@@ -47,7 +47,30 @@ app.get('/api/home', async (req, res) => {
     }
 });
 
-app.post('/api/home', async(req, res) => {
+// app.post('/api/home', async(req, res) => {
+//     const body = req.body;
+
+//     try {
+//         const result = await User.create({
+//             first_name: body.first_name,
+//             last_name: body.last_name,
+//             email: body.email,
+//             gender: body.gender,
+//             ip_address: body.ip_address
+//         });
+
+//         console.log(result);
+//         res.send(result);
+//         res.status(201).json({ msg: "User saved successfully" });
+//     } catch (error) {
+//         if (error){
+//             console.error('Error creating user:', error);
+//             res.status(500).json({ error: "Internal Server Error" });
+//         }
+//     }
+// });
+
+app.post('/api/home', async (req, res) => {
     const body = req.body;
 
     try {
@@ -60,14 +83,14 @@ app.post('/api/home', async(req, res) => {
         });
 
         console.log(result);
-        res.status(201).json({ msg: "User saved successfully" });
+        // res.json(result);
+        res.status(201).json({ msg: "User saved successfully", result });
     } catch (error) {
-        if (error){
-            console.error('Error creating user:', error);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
+        console.error('Error creating user:', error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
 
 
 app.listen(8000, () => {
