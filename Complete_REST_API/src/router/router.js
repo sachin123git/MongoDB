@@ -2,59 +2,60 @@ const express = require('express')
 const router = new express.Router()
 const user = require('../model/schema')
 
-router.post('/api/user', async(req, res) => {
+router.post('/api/user', async (req, res) => {
     const body = req.body
-    try{
-        const data = await user.create({ 
+    try {
+        const data = await user.create({
             name: body.name,
             email: body.email,
             password: body.senha,
-            role : body.role
-
+            role: body.role,
+            created_at: Date.now().toString(),
+            updated_at: Date.now().toString()
         })
         console.log(data)
         res.status(200).send(data)
-    }catch(err){
+    } catch (err) {
         res.status(500).send(err.message)
     }
 })
 
-router.get("/api/user" ,async(req, res) => {
-    try{
+router.get("/api/user", async (req, res) => {
+    try {
         const result = await user.find()
         res.status(200).send(result)
-    }catch(err){
+    } catch (err) {
         res.status(500).send(err.message)
     }
 })
 
-router.get("/api/user/:id" ,async(req, res) => {
-    try{
+router.get("/api/user/:id", async (req, res) => {
+    try {
         const _id = req.params.id
         const result = await user.findById(_id)
         res.status(200).send(result)
-    }catch(err){
+    } catch (err) {
         res.status(500).send(err.message)
     }
 })
 
-router.patch("/api/user/:id" , async(req, res) => {
+router.patch("/api/user/:id", async (req, res) => {
     const _id = req.params.id
     const body = req.body
-    try{
+    try {
         const result = await user.findByIdAndUpdate(_id, body)
         res.status(200).send(result)
-    }catch(err){
+    } catch (err) {
         res.status(500).send(err.message)
     }
 })
 
-router.delete("/api/user/:id" , async(req, res) => {
+router.delete("/api/user/:id", async (req, res) => {
     const _id = req.params.id
-    try{
+    try {
         const result = await user.findByIdAndDelete(_id)
         res.status(200).send(result)
-    }catch(err){
+    } catch (err) {
         res.status(500).send(err.message)
     }
 });

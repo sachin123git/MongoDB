@@ -16,15 +16,15 @@ const schema = mongoose.Schema({
     role: {
         type: String,
         required: true
+    },
+    created_at: {
+        type: Date,
+        default: Date.now
+    },
+    updated_at: {
+        type: Date,
+        default: Date.now
     }
-    // created_at: {
-    //     type: Date,
-    //     default: Date.now
-    // },
-    // updated_at: {
-    //     type: Date,
-    //     default: Date.now
-    // }
 })
 
 const user = mongoose.model('User',schema)
