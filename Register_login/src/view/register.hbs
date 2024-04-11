@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
+    <title>Registration Form</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,7 +22,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 600px;
         }
 
         h1 {
@@ -59,15 +60,15 @@
 
 <div class="container">
     <h1>Register</h1>
-    <form action="/register" method="post">
-        <input type="text" placeholder="Username" required name="username">
-        <input type="text" placeholder="email" required name="email">
-        <input type="password" placeholder="Password" required name="password">
-        <input type="text" placeholder="Phone" required name="phone">
-        <input type="submit" value="Register">
-       <p>If you're already registered, you can <a href="/login">login here</a>.</p>
-    </form>
-    
+   <form action="/register" method="post" enctype="multipart/form-data">
+    <input type="text" placeholder="Username" required name="username">
+    <input type="text" placeholder="Email" required name="email">
+    <input type="password" placeholder="Password" required name="password">
+    <input type="text" placeholder="Phone" required name="phone">
+    <input type="file" name="image" accept="image/*" required> 
+    <input type="submit" value="Register">
+    <p>If you're already registered, you can <a href="/login">login here</a>.</p>
+</form>
 </div>
 
 </body>

@@ -17,6 +17,9 @@ const user_data = mongoose.Schema({
         type: String,
         required: true
     },
+    image : {
+        type: String,
+    }
 })
 
 const user = mongoose.model('User' , user_data)

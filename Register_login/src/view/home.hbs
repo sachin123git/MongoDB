@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .booking-form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="submit"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Bus Booking System</h1>
+    <div class="booking-form">
+        <form action="/search" method="Get">
+            <div class="form-group">
+                <label for="from">From</label>
+                <input type="text" id="from" name="from" placeholder="Enter origin">
+            </div>
+            <div class="form-group">
+                <label for="to">To</label>
+                <input type="text" id="to" name="to" placeholder="Enter destination">
+            </div>
+            {{!-- <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date">
+            </div> --}}
+            <div class="form-group">
+                <input type="submit" value="Search Buses">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <h1>Bus Booking Data - Welcome {{ username }}</h1>
+
+    <table id="searchResults">
+        <tr>
+            <th>ID</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Phone</th>
+            <th>Price</th>
+        </tr>
+         <tbody>
+                <tbody>
+    {{#each data}}
+        <tr>
+            <td>{{id}}</td>
+            <td>{{from}}</td>
+            <td>{{to}}</td>
+            <td>{{name}}</td>
+            <td>{{date}}</td>
+            <td>{{phone}}</td>
+            <td>{{price}}</td>
+        </tr>
+    {{/each}}
+</tbody>
+
+            </tbody>
+    </table>
+</div>
+</body>
+</html>
