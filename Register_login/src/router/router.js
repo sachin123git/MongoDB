@@ -35,6 +35,11 @@ router.get('/login', (req, res) => {
 router.post('/register', upload.single('image'), async (req, res) => {
     try {
         const body = req.body;
+        const existingUser = await User.findOne({ email: body.email });
+
+        if (existingUser) {
+            return res.status(400).send("Email already exists");
+        }
     
         const newUser = await User.create({
             username: body.username,
@@ -43,11 +48,14 @@ router.post('/register', upload.single('image'), async (req, res) => {
             phone: body.phone,
             image: path.join('src', 'uploads', req.file.filename)
         });
-
+k
+        const Token = await newUser.generateAuthToken();
+        
         console.log(newUser);
         console.log(req.file);
-        res.send(newUser);
+        res.redirect('login');
     } catch (error) {
+        
         console.error(error);
         res.status(500).send("Internal Server Error");
     }

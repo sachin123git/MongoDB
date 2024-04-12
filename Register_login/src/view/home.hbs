@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,87 +66,116 @@
         }
 
         table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
 
-th, td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-}
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
 
-th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
 
-tr:hover {
-    background-color: #ddd;
-}
+        tr:hover {
+            background-color: #ddd;
+        }
 
+        /* Navbar styles */
+        .navbar {
+            background-color: #4CAF50;
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: rgb(0, 0, 0);
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Bus Booking System</h1>
-    <div class="booking-form">
-        <form action="/search" method="Get">
-            <div class="form-group">
-                <label for="from">From</label>
-                <input type="text" id="from" name="from" placeholder="Enter origin">
-            </div>
-            <div class="form-group">
-                <label for="to">To</label>
-                <input type="text" id="to" name="to" placeholder="Enter destination">
-            </div>
-            {{!-- <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" id="date" name="date">
-            </div> --}}
-            <div class="form-group">
-                <input type="submit" value="Search Buses">
-            </div>
-        </form>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <!-- Add more links as needed -->
     </div>
-</div>
 
-<div class="container">
-    <h1>Bus Booking Data - Welcome {{ username }}</h1>
+    <!-- Your existing HTML content -->
+    <div class="container">
+        <h1>Bus Booking System</h1>
+        <div class="booking-form">
+            <form action="/search" method="Get">
+                <div class="form-group">
+                    <label for="from">From</label>
+                    <input type="text" id="from" name="from" placeholder="Enter origin">
+                </div>
+                <div class="form-group">
+                    <label for="to">To</label>
+                    <input type="text" id="to" name="to" placeholder="Enter destination">
+                </div>
+                {{!-- <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date">
+                </div> --}}
+                <div class="form-group">
+                    <input type="submit" value="Search Buses">
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <table id="searchResults">
-        <tr>
-            <th>ID</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Phone</th>
-            <th>Price</th>
-        </tr>
-         <tbody>
-                <tbody>
-    {{#each data}}
-        <tr>
-            <td>{{id}}</td>
-            <td>{{from}}</td>
-            <td>{{to}}</td>
-            <td>{{name}}</td>
-            <td>{{date}}</td>
-            <td>{{phone}}</td>
-            <td>{{price}}</td>
-        </tr>
-    {{/each}}
-</tbody>
+    <div class="container">
+        <h1>Bus Booking Data - Welcome {{ username }}</h1>
 
+        <table id="searchResults">
+            <tr>
+                <th>ID</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Phone</th>
+                <th>Price</th>
+            </tr>
+            <tbody>
+                {{#each data}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{from}}</td>
+                    <td>{{to}}</td>
+                    <td>{{name}}</td>
+                    <td>{{date}}</td>
+                    <td>{{phone}}</td>
+                    <td>{{price}}</td>
+                </tr>
+                {{/each}}
             </tbody>
-    </table>
-</div>
+        </table>
+    </div>
+
 </body>
+
 </html>
