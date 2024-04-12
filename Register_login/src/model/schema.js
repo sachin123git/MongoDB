@@ -31,11 +31,14 @@ const user_data = mongoose.Schema({
 
 user_data.methods.generateAuthToken = async function(){
     try{
-        const token = await jwt.sign({_id : this._id}, SECRET-KEY)
+        const token = await jwt.sign({_id : this._id}, process.env.SECRET_KEY)
         this.tokens.push({tokenType : token})
+        await this.save();
+        console.log(token)
+        return token;
     }catch(err){
         console.log(err)
-    }
+    } 
 }
 
 const user = mongoose.model('User' , user_data)
