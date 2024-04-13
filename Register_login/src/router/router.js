@@ -1,7 +1,7 @@
 
 const express = require('express');
 const path = require('path');
-const Auth = require('../middleware/Auth')
+const { Auth, generateAuthToken } = require('../middleware_service/Auth')
 const multer = require('multer');
 const mongoose = require('mongoose');
 const User = require('../model/schema');
@@ -11,7 +11,7 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'src/uploads/')
+        cb(null, `src/uploads`)
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()} - ${file.originalname}`)
@@ -24,9 +24,19 @@ router.get('/home', (req, res) => {
     res.render('home');
 });
 
-router.get('/secrete', Auth, (req, res) => {
-    console.log(req.cookies.token);
-    res.render('secrete');
+router.get('/profile', Auth, async (req, res) => {
+    try {
+        const user = req.user; // Assuming req.user contains the user data\
+
+        res.render('profile', {
+            username: user.username,
+            email: user.email,
+            image : user.image
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 router.get('/register', (req, res) => {
@@ -38,10 +48,20 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/logout', Auth, async (req, res) => {
-    // Clear the token cookie
-    res.clearCookie("token");
-    // Redirect to the login page
-    res.redirect('login');
+    try {
+        req.user.tokens = [];
+        await req.user.save(); // Save changes to the user
+
+        // Clear the token cookie
+        res.clearCookie("token");
+
+        // Redirect to the login page
+        res.redirect('/login');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+
 });
 
 router.post('/register', upload.single('image'), async (req, res) => {
@@ -58,14 +78,14 @@ router.post('/register', upload.single('image'), async (req, res) => {
             email: body.email,
             password: body.password,
             phone: body.phone,
-            image: path.join('src', 'uploads', req.file.filename)
+            image: path.join('uploads', req.file.filename)
         });
 
-        const Token = await newUser.generateAuthToken();
+        const Token = await generateAuthToken(newUser);
 
         res.cookie('token', Token, {
             httpOnly: true,
-            expires: new Date(Date.now() + 90000),
+            expires: new Date(Date.now() + 60000),
         })
 
         console.log(newUser);
@@ -90,15 +110,15 @@ router.post('/login', async (req, res) => {
             return res.status(404).send("User not found");
         }
 
-        const Token = await user.generateAuthToken();
+        const Token = await generateAuthToken(user);
 
         res.cookie('token', Token, {
             httpOnly: true,
-            expires: new Date(Date.now() + 90000),
+            expires: new Date(Date.now() + 20000),
         })
 
         // Render the home page and pass the username as data
-        res.render('home', { username: user.username });
+        res.render('home', { username: req.cookies.token && user.username });
     } catch (error) {
         console.error(error);
         return res.status(500).send("Internal Server Error");
@@ -109,8 +129,6 @@ router.get('/search', async (req, res) => {
     try {
         const { from, to } = req.query;
 
-        console.log(from, to);
-
         const travel_data = await data.findOne({ from, to });
 
         if (!travel_data || travel_data.length === 0) {
@@ -118,7 +136,7 @@ router.get('/search', async (req, res) => {
         }
 
         console.log(travel_data);
-        res.render('home', { data: travel_data });
+        res.render('home', { data: req.cookies.token && travel_data });
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");

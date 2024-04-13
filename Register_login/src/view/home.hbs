@@ -120,7 +120,7 @@
         <a href="#">Home</a>
         <a href="#">About</a>
         <a href="#">Contact</a>
-        <a href="secrete">secrete</a>
+        <a href="/profile">Profile</a>
         <a href="/logout" style="background-color: #f44336; /* Red */
             border: none;
             color: white;
@@ -162,30 +162,38 @@
 
     <div class="container">
         <h1>Bus Booking Data - Welcome {{ username }}</h1>
-
-        <table id="searchResults">
-            <tr>
-                <th>ID</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Phone</th>
-                <th>Price</th>
-            </tr>
-            <tbody>
-                {{#each data}}
+  <table id="searchResults">
+            <thead>
                 <tr>
-                    <td>{{id}}</td>
-                    <td>{{from}}</td>
-                    <td>{{to}}</td>
-                    <td>{{name}}</td>
-                    <td>{{date}}</td>
-                    <td>{{phone}}</td>
-                    <td>{{price}}</td>
+                    <th>ID</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Phone</th>
+                    <th>Price</th>
                 </tr>
-                {{/each}}
+            </thead>
+            <tbody>
+                {{#if data}}
+                    {{#each data}}
+                        <tr>
+                            <td>{{id}}</td>
+                            <td>{{from}}</td>
+                            <td>{{to}}</td>
+                            <td>{{name}}</td>
+                            <td>{{date}}</td>
+                            <td>{{phone}}</td>
+                            <td>{{price}}</td>
+                        </tr>
+                    {{/each}}
+                {{else}}
+                    <tr>
+                        <td colspan="7">No Data Found</td>
+                    </tr>
+                {{/if}}
             </tbody>
+        </table>
         </table>
     </div>
 
