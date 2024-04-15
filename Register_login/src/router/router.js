@@ -5,7 +5,11 @@ const { Auth, generateAuthToken } = require('../middleware_service/Auth')
 const multer = require('multer');
 const mongoose = require('mongoose');
 const User = require('../model/schema');
-const data = require('../model/schema2')
+const data = require('../model/schema2');
+const {main , generateOTP} = require('../OTP_Verify/verify')
+const fs = require('fs');
+const { Console } = require('console');
+const { send } = require('process');
 
 const router = express.Router();
 
@@ -31,7 +35,9 @@ router.get('/profile', Auth, async (req, res) => {
         res.render('profile', {
             username: user.username,
             email: user.email,
-            image : user.image
+            image: user.image,
+            birthdate : user.birthdate,
+            id: user.id
         });
     } catch (error) {
         console.error(error);
@@ -77,7 +83,7 @@ router.post('/register', upload.single('image'), async (req, res) => {
             username: body.username,
             email: body.email,
             password: body.password,
-            phone: body.phone,
+            birthdate: body.birthdate,
             image: path.join('uploads', req.file.filename)
         });
 
@@ -114,7 +120,7 @@ router.post('/login', async (req, res) => {
 
         res.cookie('token', Token, {
             httpOnly: true,
-            expires: new Date(Date.now() + 20000),
+            expires: new Date(Date.now() + 100000),
         })
 
         // Render the home page and pass the username as data
@@ -142,5 +148,61 @@ router.get('/search', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+router.get('/contact', async (req, res) => {
+    try {
+        const filePath = path.join(`src/view/contact.html`);
+        console.log(filePath)
+
+        fs.readFile(filePath, 'utf8', (err, data) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Internal Server Error');
+            } else {
+                res.setHeader('Content-Type', 'text/html');
+                res.send(data);
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+// This is a simplified example, adjust according to your actual implementation
+let storedOTP; // Variable to store the OTP
+
+router.get('/verify', async (req, res) => {
+    try {
+        storedOTP = generateOTP(); // Generate OTP and store it
+        await main(storedOTP); // Send the OTP via email
+        console.log("OTP sent:", storedOTP);
+        res.send('Success');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.post('/verify/:otp', async (req, res) => {
+    try {
+        const { otp } = req.body; // Retrieve the OTP entered by the user
+        console.log('OTP entered by the user:', otp);
+
+        // Compare the entered OTP with the stored OTP
+        if (otp === storedOTP.toString()) { // Compare as strings
+            res.render('verifymsg').send('Verified');
+        } else {
+            console.log('OTP Verification Failed');
+            res.send('Invalid OTP');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+
+
 
 module.exports = router;

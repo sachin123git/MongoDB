@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,6 +60,22 @@
             background-color: #45a049;
         }
     </style>
+    <script>
+        const handleSubmit = (userId) => {
+            window.location.href = '/register?id=' + userId;
+        }
+
+        const handleotp = () => {
+            window.location.href = '/verify';
+        }
+    </script>
+
+    <script>
+        // JavaScript function to handle form submission
+        const handleSubmit = (userId) => {
+            window.location.href = '/register?id=' + userId;
+        }
+    </script>
 </head>
 
 <body>
@@ -67,9 +84,51 @@
             <img src="{{ image }}" alt="Profile Picture">
             <h2>{{ username }}</h2>
             <p>Email: {{ email }}</p>
-            <p>Location:</p>
+            <p>Birthdate: {{ birthdate }}</p>
+            <!-- Add more fields as needed -->
+
+            <!-- Profile Verify Button -->
+            <button class="button" data-toggle="modal" data-target="#profileModal" onclick="handleotp()">Send OTP For
+                Profile Verify</button>
         </div>
-        <button class="button">Edit Profile</button>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Profile Details & OTP Verification</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Profile details content goes here -->
+                    <p>Name: {{ username }}</p>
+                    <p>Email: {{ email }}</p>
+                    <p>Birthdate: {{ birthdate }}</p>
+                    <img src="{{ image }}" alt="Profile Image"
+                        style="max-width: 100%; height: auto; margin-bottom: 10px;">
+                    <form action="/verify" method="post">
+                        <label for="otp">Enter OTP:</label>
+                        <input type="text" id="otp" class="form-control" placeholder="Enter OTP" name="otp" required>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" id="verifyOTP">Verify OTP</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
