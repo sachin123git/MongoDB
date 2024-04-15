@@ -183,7 +183,7 @@ router.get('/verify', async (req, res) => {
     }
 });
 
-router.post('/verify/:otp', async (req, res) => {
+router.post('/verify', async (req, res) => {
     try {
         const { otp } = req.body; // Retrieve the OTP entered by the user
         console.log('OTP entered by the user:', otp);
